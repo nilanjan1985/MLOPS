@@ -73,6 +73,14 @@ class Configuration:
             raise CreditcardException(e,sys) from e
 
     def get_data_validation_config(self) -> DataValidationConfig:
+        try:
+            schema_file_path = None
+            data_validation_config = DataValidationConfig(
+               schema_file_path = schema_file_path 
+            )
+            return data_validation_config
+        except Exception as e:
+            raise CreditcardException(e,sys) from e
         pass
     def get_data_transformation_config(self) -> DataTransformationConfig:
         pass
