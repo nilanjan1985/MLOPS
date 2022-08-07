@@ -1,0 +1,14 @@
+grid_search:
+  class: GridSearchCV
+  module: sklearn.model_selection
+  params:
+    cv: 5
+    verbose: 2
+  module_1:
+    class: RandomForestClassification
+    module: sklearn.ensemble
+    params:
+      min_samples_leaf: 3
+    search_param_grid:
+      min_samples_leaf:
+      - 6

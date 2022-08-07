@@ -2,10 +2,44 @@ from creditcard.component.data_validation import DataValidation
 from creditcard.config.configuration import Configuration
 from creditcard.logger import logging
 from creditcard.exception import CreditcardException
+from collections import namedtuple
+from datetime import datetime
+import uuid
+from creditcard.config.configuration import Configuartion
+from creditcard.logger import logging, get_log_file_name
+from creditcard.exception import HousingException
+from threading import Thread
+from typing import List
+from multiprocessing import Process
+from creditcard.entity.artifact_entity import ModelPusherArtifact, DataIngestionArtifact, ModelEvaluationArtifact
+from creditcard.entity.artifact_entity import DataValidationArtifact, DataTransformationArtifact, ModelTrainerArtifact
+from creditcard.entity.config_entity import DataIngestionConfig, ModelEvaluationConfig
+from creditcard.component.data_ingestion import DataIngestion
+from creditcard.component.data_validation import DataValidation
+from creditcard.component.data_transformation import DataTransformation
+from creditcard.component.model_trainer import ModelTrainer
+from creditcard.component.model_evaluation import ModelEvaluation
+from creditcard.component.model_pusher import ModelPusher
+
+import os, sys
+from collections import namedtuple
+from datetime import datetime
+import pandas as pd
+from creditcard .constant import EXPERIMENT_DIR_NAME, EXPERIMENT_FILE_NAM
 
 from creditcard.entity.artifact_entity import DataIngestionArtifact
 from creditcard.entity.config_entity   import DataIngestionConfig
 from creditcard.component.data_ingestion import DataIngestion
+from creditcard.component.data_validation import DataValidation
+from creditcard.component.data_transformation import DataTransformation
+from creditcard.component.model_trainer import ModelTrainer
+from creditcard.component.model_evaluation import ModelEvaluation
+from creditcard.component.model_pusher import ModelPusher
+import os, sys
+from collections import namedtuple
+from datetime import datetime
+import pandas as pd
+from creditcard.constant import EXPERIMENT_DIR_NAME, EXPERIMENT_FILE_NAME
 
 import os , sys
 
@@ -35,8 +69,20 @@ class Pipeline:
             raise CreditcardException(e, sys) from e
         pass
 
-    def start_data_transformation(self):
-        pass
+    def start_data_transformation(self,
+                                  data_ingestion_artifact: DataIngestionArtifact,
+                                  data_validation_artifact: DataValidationArtifact
+                                  ) -> DataTransformationArtifact:
+        try:
+            data_transformation = DataTransformation(
+                data_transformation_config=self.config.get_data_transformation_config(),
+                data_ingestion_artifact=data_ingestion_artifact,
+                data_validation_artifact=data_validation_artifact
+            )
+            return data_transformation.initiate_data_transformation()
+        except Exception as e:
+            raise CreditcardException(e, sys)
+
 
     def start_model_trainer(self):
         pass
