@@ -12,3 +12,34 @@ grid_search:
     search_param_grid:
       min_samples_leaf:
       - 6
+      - 12
+      n_estimators:
+      - 10
+  module_2:
+     class: KnearestNeighborsClassification
+     module: sklearn.neighbors
+     weights:
+     - 'uniform'
+     - 'distance'
+     algorithm:
+     - 'ball_tree'
+     - 'kd_tree'
+     - 'brute'
+     - 'auto'
+     params: 
+       n_jobs: 5
+     search_param_grid:
+       leaf_size:
+       - 4
+       - 6
+       - 8
+       n_estimators:
+       - 100
+       - 200
+       
+        
+          
+     
+     
+
+        
